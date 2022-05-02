@@ -1,5 +1,5 @@
 function handler(event, context, callback) {
-    let text = "Count how many characters";
+    let text = "Count how many characters in dev";
     let length = text.length;
 
     callback(null, {
