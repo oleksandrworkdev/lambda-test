@@ -1,0 +1,14 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Lambda canary deployment example
+Resources:
+  CountFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs12.x
+      FunctionName: CountFunction
+      CodeUri: ./src
+      AutoPublishAlias: prod
+      DeploymentPreference:
+        Type: CodeDeployDefault.LambdaCanary10Percent5Minutes
