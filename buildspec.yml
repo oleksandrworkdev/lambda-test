@@ -6,7 +6,7 @@ phases:
   build:
     commands:
       - sam build
-      - sam package --resolve-s3 --output-template-file outputtemplate.yml
+      - sam package --resolve-s3 --s3-prefix prod --output-template-file outputtemplate.yml
 artifacts:
   type: zip
   files:
