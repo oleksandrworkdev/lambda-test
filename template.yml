@@ -20,11 +20,6 @@ Resources:
         IndexDocument: index.html
         ErrorDocument: 404.html
     DeletionPolicy: Retain
-    PublicAccessBlockConfiguration:
-      BlockPublicAcls : false
-      BlockPublicPolicy : false
-      IgnorePublicAcls : false
-      RestrictPublicBuckets : false
     
   PublicBucketPolicy:
     Type: AWS::S3::BucketPolicy
