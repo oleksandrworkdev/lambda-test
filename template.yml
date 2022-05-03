@@ -18,7 +18,7 @@ Resources:
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
-        ErrorDocument: error.html
+        ErrorDocument: 404.html
     DeletionPolicy: Retain
 
 
@@ -85,11 +85,3 @@ Outputs:
       - S3Bucket
       - WebsiteURL
     Description: URL for website hosted on S3
-  S3BucketSecureURL:
-    Value: !Join
-      - ''
-      - - 'https://'
-        - !GetAtt
-          - S3Bucket
-          - DomainName
-    Description: Name of S3 bucket to hold website content
