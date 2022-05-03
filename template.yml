@@ -11,6 +11,7 @@ Resources:
       AutoPublishAlias: prod
       DeploymentPreference:
         Type: CodeDeployDefault.LambdaCanary10Percent5Minutes
+
   S3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
@@ -19,6 +20,65 @@ Resources:
         IndexDocument: index.html
         ErrorDocument: error.html
     DeletionPolicy: Retain
+
+
+  CopyCustomResource:
+    Type: "AWS::CloudFormation::CustomResource"
+    Properties:
+      ServiceToken: !GetAtt CopyFunction.Arn
+
+  CopyLayerVersion:
+    Type: "AWS::Serverless::LayerVersion"
+    Properties:
+      ContentUri: ../copy.zip
+      CompatibleRuntimes:
+        - nodejs12.x  
+  
+  CopyRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+      - PolicyName: S3CopyPolicy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - s3:GetObject
+            - s3:ListBucket
+            - s3:PutObject
+            - s3:PutObjectAcl
+            Resource:
+              - !Sub
+                - arn:aws:s3:::${TargetBucket}/*
+                - TargetBucket: !Ref S3Bucket
+              - !Sub
+                - arn:aws:s3:::${TargetBucket}
+                - TargetBucket: !Ref S3Bucket
+
+  CopyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./www
+      Environment:
+        Variables:
+          BUCKET: !Ref S3Bucket
+      Handler: copy.staticHandler
+      Layers:
+        - !Ref CopyLayerVersion
+      Role: !GetAtt CopyRole.Arn
+      Runtime: nodejs12.x
+      Timeout: 300
+
 Outputs:
   WebsiteURL:
     Value: !GetAtt
