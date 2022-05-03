@@ -5,7 +5,9 @@ phases:
       nodejs: 12
   build:
     commands:
-      cd copy-lambda && npm install --prefix nodejs mime-types && cp copy.js nodejs/node_modules/
+      cd copy-lambda
+      npm install --prefix nodejs mime-types
+      cp copy.js nodejs/node_modules/
       zip -r ../copy.zip nodejs
 
       cd ../
