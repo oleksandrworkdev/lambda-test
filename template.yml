@@ -30,9 +30,9 @@ Resources:
   CopyLayerVersion:
     Type: "AWS::Serverless::LayerVersion"
     Properties:
-      ContentUri: ../copy.zip
+      ContentUri: ./copy.zip
       CompatibleRuntimes:
-        - nodejs12.x  
+        - nodejs12.x
   
   CopyRole:
     Type: "AWS::IAM::Role"
